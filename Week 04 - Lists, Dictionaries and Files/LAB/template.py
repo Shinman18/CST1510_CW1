@@ -2,9 +2,9 @@
 RECORD CHECK  -  my version
 ===========================
 
-Name  :
-Lane  :  AI / Cyber / IT      (delete two)
-Date  :
+Name  :  SHINAY MEHANGRA
+Lane  :  Cyber      (delete two)
+Date  :  10/11/2026
 
 Run it:   python template.py
 
@@ -20,7 +20,12 @@ Delete these instructions as you replace them with your code.
 #    one-line docstring.
 
 # your function(s) go here
-
+def check_record(value, limit):
+    """Check if the value exceeds the limit and return difference, percent, and status."""
+    difference = value - limit
+    percent = (value / limit) * 100 if limit != 0 else 0
+    status = "OVER LIMIT" if value > limit else "OK"
+    return difference, percent, status
 
 # ====================================================================== STORE
 # 2. Get your records into a list of dicts, each shaped like:
@@ -33,7 +38,26 @@ Delete these instructions as you replace them with your code.
 #    Excellent : also write the results out to a new file (one line per
 #                record: label, status), as well as printing them.
 
-records = []   # replace with your code
+def load_records(path):
+    """Load records from a file and return a list of dictionaries."""
+    records = []
+    try:
+        with open(path, "r") as f:
+            for line in f:
+                if not line.strip():  # Skip empty lines
+                    continue
+                label, value, limit = line.strip().split(",")
+                records.append({
+                    "label": label,
+                    "value": float(value),
+                    "limit": float(limit)
+                })
+        return records
+    except FileNotFoundError:
+        print(f"File not found: {path}")
+        return []
+
+records = load_records("records_sample.txt")
 
 
 # =============================================================== PROCESS + OUTPUT
@@ -43,6 +67,16 @@ records = []   # replace with your code
 #                print that once, after the loop ends.
 
 # your loop goes here
+over_limit_count = 0
+
+with open ("results.txt", "w") as f:
+    for rec in records:
+        difference, percent, status = check_record(rec["value"], rec["limit"])
+        f.write(f"{rec['label']},{status}\n")
+        if status == "OVER LIMIT":
+            over_limit_count += 1
+
+print(f"Total OVER LIMIT records: {over_limit_count}")
 
 
 # ==========================================================================
