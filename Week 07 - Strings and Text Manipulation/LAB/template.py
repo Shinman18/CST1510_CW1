@@ -2,9 +2,9 @@
 RECORD CHECK  -  my version
 ===========================
 
-Name  :
-Lane  :  AI / Cyber / IT      (delete two)
-Date  :
+Name  :  SHINAY MEHANGRA
+Lane  :  Cyber     (delete two)
+Date  :  10/11/2026
 
 Run it:   python template.py
 
@@ -21,7 +21,28 @@ Delete these instructions as you replace them with your code.
 #    (e.g. OVER LIMIT / WARNING / OK, or FLAGGED / OK). Give both a
 #    one-line docstring.
 
-# your function(s) go here
+def parse_line(raw_line):
+    cleaned_line = raw_line.strip()
+    hostname_part, rest = cleaned_line.split(",", 1)
+    clean_hostname = hostname_part.strip().lower()
+
+    data = {"hostname": clean_hostname}
+
+    for piece in rest.split(","):
+        key, value = piece.split("=")
+        data[key.strip()] = float(value.strip())
+    
+    return data
+
+
+def status_of(record):
+    """Classify disk usage as OVER LIMIT, WARNING, or OK."""
+    usage_percent = record["used"] / record["total"] * 100
+    if usage_percent > 100:
+        return "OVER LIMIT"
+    if usage_percent >= 90:
+        return "WARNING"
+    return "OK"
 
 
 # ====================================================================== INPUT
@@ -35,7 +56,12 @@ Delete these instructions as you replace them with your code.
 #    Excellent: save these lines to a file and load them with open() /
 #    a for loop over the file, instead of writing them directly here.
 
-raw_records = []   # replace with your code
+raw_records = [
+    " Srv-01 , used=87 , total=100 ",
+    "SRV-02 , used=120 , total=100 ",
+    "SRV-04,used=95,total=100",
+    "srv-05 , used=20,total=100 "
+]
 
 
 # =============================================================== PROCESS + OUTPUT
@@ -47,7 +73,11 @@ raw_records = []   # replace with your code
 #                how many flagged.
 
 for raw_record in raw_records:
-    pass   # replace with your code
+    if raw_record.strip():
+        parsed = parse_line(raw_record)
+        status = status_of(parsed)
+        print(f"{parsed['hostname']} {status}")
+
 
 
 # ==========================================================================
@@ -57,3 +87,4 @@ for raw_record in raw_records:
 #    [ ] Run it with a value that will not convert to a number - write the
 #        error down
 #    [ ] Check every function does one job, with a docstring
+ 
