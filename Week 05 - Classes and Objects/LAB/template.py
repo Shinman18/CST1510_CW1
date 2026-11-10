@@ -2,9 +2,9 @@
 RECORD CHECK  -  my version
 ===========================
 
-Name  :
-Lane  :  AI / Cyber / IT      (delete two)
-Date  :
+Name  :  SHINAY MEHANGRA
+Lane  :  Cyber    (delete two)
+Date  :  10/11/26
 
 Run it:   python template.py
 
@@ -24,8 +24,17 @@ Delete these instructions as you replace them with your code.
 #                see the note below.
 
 # your class goes here
+class Record:
+    def __init__(self,label,value,limit):
+        self.label = label
+        self.value = float(value)
+        self.limit = float(limit)
 
-
+    def status(self):
+        if self.value > self.limit:
+            return "OVER LIMIT"
+        else:
+            return "OK"
 # ==================================================================== RECORDS
 # 2. Create your records.
 #
@@ -35,7 +44,17 @@ Delete these instructions as you replace them with your code.
 #                lines from a file and returns a list of Record objects. Make
 #                your own data file, one record per line.
 
-records = []   # replace with your code
+def load_records(path):
+    records = []
+    with open(path, "r") as f:
+        for line in f:
+            if not line.strip():
+                continue
+            label, value, limit = line.strip().split(",")
+            records.append(Record(label,value,limit))
+    return records
+
+records = load_records("Week 05 - Classes and Objects/LAB/records_sample.txt")
 
 
 # ==================================================================== OUTPUT
@@ -55,7 +74,9 @@ for record in records:
     print(f"  RECORD CHECK  -  {record.label}")
     print("=" * 34)
 
-    # your report lines go here
+    print(f"Value: {record.value}")
+    print(f"Limit: {record.limit}")
+    print(f"Status: {record.status()}")
 
     print("=" * 34)
 
